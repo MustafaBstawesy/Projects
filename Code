@@ -1,0 +1,222 @@
+#include <iostream>
+#include <cstdlib>
+#include <stdlib.h>
+using namespace std;
+
+int ReadPositiveNumber(string Message) // To Get Game Rounds
+{
+	int Number = 0;
+	do
+	{
+		cout << Message;
+		cin >> Number;
+
+	} while (Number < 0);
+
+	return Number;
+} 
+
+int ReadPositiveNumberInRange123(string Message) // To Chosse [1] Stone or [2] Paper or [3] Scissors
+{
+	int Number = 0;
+	do
+	{
+		cout << Message;
+		cin >> Number;
+
+	} while (!(Number == 1 || Number == 2 || Number == 3));
+
+	return Number;
+}
+
+int RandomNumber(int From, int To) // To Get Random Number From The Computer in Range 1 : 3
+{
+	int Random = rand() % (To - From + 1) + From;
+	return Random;
+}
+
+string Tags(int Input) // To Return String Value From Integer Number Value
+{
+	switch (Input)
+	{
+	case 1:
+		return "  Choice: Stone \n";
+	case 2:
+		return "  Choice: Paper \n";
+	case 3:
+		return "  Choice: Scissors \n";
+	}
+}
+
+char Yes_No() // To Get Yes or No From The Player If He Wants to Play Again
+{
+	char Input;
+	do
+	{
+		cout << "Do You Wanna Play Again? Y/N";
+		cin >> Input;
+
+	} while (!((Input == 'y' || Input == 'Y') || (Input == 'n' || Input == 'N')));
+
+	return Input;
+}
+
+string WhoIsWinner(char Status) // To Determine Who is Winner
+{
+	switch (Status)
+	{
+	case'D':
+		return "[No Winner]\n";
+	case'C':
+		return "[Computer]\n";
+	case'P':
+		return "[Player]\n";
+	}
+}
+
+void RoundStatus(int NumberOfRound, int UserInput, int ComputerInput, char Status) // To Show The Results Each Round
+{
+	cout << "____________________________________________________\n\n";
+	cout << "_______________Round[" << NumberOfRound + 1 << "]_______________\n";
+
+	cout << "Player1 " << Tags(UserInput);
+	cout << "Computer" << Tags(ComputerInput);
+	cout << "Round Winner    :" << WhoIsWinner(Status);
+}
+
+void YellowScreen() // To Make Console Color Yellow
+{
+	system("color e0");
+}
+
+void RedScreen() // To Make Console Color Red
+{
+	system("color 4e");
+}
+
+void GreenScreen() // To Make Console Color Green
+{
+	system("color 2b");
+}
+
+void RestScreen() // To Make Console Color Black And Rest or Make The Screen Empty 
+{
+	system("color 0F");
+	system("cls");
+}
+
+char FinalWinner(int PlayerWonTimes, int ComputerWonTimes, char Status) // To Determine Who is Final Winner
+{
+	if (PlayerWonTimes > ComputerWonTimes)
+		return 'P';
+	else if (ComputerWonTimes > PlayerWonTimes)
+		return 'C';
+	else if (ComputerWonTimes == PlayerWonTimes)
+		return 'D';
+}
+
+void MatchStats(int GameRounds, int PlayerWonTimes, int ComputerWonTimes, int DrawTimes, char Status) // To Show All Results of The Match
+{
+	cout << "\t\t\t____________________________________________________________________\n\n";
+	cout << "\t\t\t\t\t\t+++ G a m e  O v e r +++\n\n";
+	cout << "\t\t\t____________________________________________________________________\n\n";
+	cout << "\t\t\t____________________________[Game Results]__________________________\n\n";
+	cout << "Game Rounds       : " << GameRounds << endl;
+	cout << "Player Won Times  : " << PlayerWonTimes << endl;
+	cout << "Computer Won Times: " << ComputerWonTimes << endl;
+	cout << "Draw Times        : " << DrawTimes << endl;
+	cout << "Final Winner      :" << WhoIsWinner(FinalWinner(PlayerWonTimes, ComputerWonTimes, Status));
+	cout << "\t\t\t____________________________________________________________________\n\n";
+}
+
+char PlayAgain() // Tp Determine The Player Will Play Again or Not
+{
+	char YesNoInput = Yes_No();
+
+	if (YesNoInput == 'Y' || YesNoInput == 'y')
+		RestScreen();
+
+	return YesNoInput;
+}
+
+bool Draw(int UserInput, int ComputerInput) // Condition If The Player & Computer Draw 
+{
+	return (UserInput == 1 && ComputerInput == 1) || (UserInput == 2 && ComputerInput == 2) || (UserInput == 3 && ComputerInput == 3);
+}
+
+bool Lose(int UserInput, int ComputerInput) // Condition if The Player Lose From Computer
+{
+	return (UserInput == 1 && ComputerInput == 2) || (UserInput == 2 && ComputerInput == 3) || (UserInput == 3 && ComputerInput == 1);
+}
+
+bool Win(int UserInput, int ComputerInput) // Condition if The Player Win on Computer
+{
+	return (UserInput == 2 && ComputerInput == 1) || (UserInput == 3 && ComputerInput == 2) || (UserInput == 1 && ComputerInput == 3);
+}
+
+void ConditionsOfGame(int UserInput, int ComputerInput, char& Status, int NumberOfRound, int& DrawTimes, int& ComputerWonTimes, int& PlayerWonTimes) // Game Rules
+{
+	if (Draw(UserInput, ComputerInput))
+	{
+	    Status = 'D'; // Draw
+
+		YellowScreen();
+
+		RoundStatus(NumberOfRound, UserInput, ComputerInput, Status);
+
+		DrawTimes++;
+	}
+	else if (Lose(UserInput, ComputerInput))
+	{
+		cout << "\a";
+
+		Status = 'C'; // Computer is Winner
+
+		RedScreen();
+
+		RoundStatus(NumberOfRound, UserInput, ComputerInput, Status);
+
+		ComputerWonTimes++;
+	}
+	else if (Win(UserInput, ComputerInput))
+	{
+		Status = 'P'; // Plyer is Winner
+
+		GreenScreen();
+
+		RoundStatus(NumberOfRound, UserInput, ComputerInput, Status);
+
+		PlayerWonTimes++;
+	}
+}
+
+void StartGame() // Stone Paper Scissor Game
+{
+	int UserInput = 0, ComputerInput = 0, PlayerWonTimes = 0, ComputerWonTimes = 0, DrawTimes = 0;
+	char Status, ContinueNotContinue = 'Y';
+
+	while (ContinueNotContinue == 'y' || ContinueNotContinue == 'Y')
+	{
+		int GameRounds = ReadPositiveNumber(" How Many Rounds You Wanna Play ? ");
+
+		for (int NumberOfRound = 0; NumberOfRound < GameRounds; NumberOfRound++)
+		{
+
+			cout << "___________________________________\n\n";
+			cout << " Round [" << NumberOfRound + 1 << "] Begins \n";
+
+			UserInput = ReadPositiveNumberInRange123(" Your Choice: [1]:Stone, [2]:Paper, [3]:Scissors ? ");
+			ComputerInput = RandomNumber(1, 3);
+
+			ConditionsOfGame(UserInput, ComputerInput, Status, NumberOfRound, DrawTimes, ComputerWonTimes, PlayerWonTimes);
+		}
+		MatchStats(GameRounds, PlayerWonTimes, ComputerWonTimes, DrawTimes, Status);
+		ContinueNotContinue = PlayAgain();
+	}
+}
+
+int main()
+{
+	srand((unsigned)time(NULL));
+	StartGame();
+}
