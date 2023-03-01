@@ -53,7 +53,7 @@ char Yes_No() // To Get Yes or No From The Player If He Wants to Play Again
 	char Input;
 	do
 	{
-		cout << "Do You Wanna Play Again? Y/N";
+		cout << "Do You Wanna Play Again? Y/N : ";
 		cin >> Input;
 
 	} while (!((Input == 'y' || Input == 'Y') || (Input == 'n' || Input == 'N')));
@@ -81,7 +81,7 @@ void RoundStatus(int NumberOfRound, int UserInput, int ComputerInput, char Statu
 
 	cout << "Player1 " << Tags(UserInput);
 	cout << "Computer" << Tags(ComputerInput);
-	cout << "Round Winner    :" << WhoIsWinner(Status);
+	cout << "Round Winner    : " << WhoIsWinner(Status);
 }
 
 void YellowScreen() // To Make Console Color Yellow
@@ -108,11 +108,20 @@ void RestScreen() // To Make Console Color Black And Rest or Make The Screen Emp
 char FinalWinner(int PlayerWonTimes, int ComputerWonTimes, char Status) // To Determine Who is Final Winner
 {
 	if (PlayerWonTimes > ComputerWonTimes)
+	{
+		GreenScreen();
 		return 'P';
+	}
 	else if (ComputerWonTimes > PlayerWonTimes)
+	{
+		RedScreen();
 		return 'C';
+	}
 	else if (ComputerWonTimes == PlayerWonTimes)
+	{
+		YellowScreen();
 		return 'D';
+	}
 }
 
 void MatchStats(int GameRounds, int PlayerWonTimes, int ComputerWonTimes, int DrawTimes, char Status) // To Show All Results of The Match
@@ -121,11 +130,11 @@ void MatchStats(int GameRounds, int PlayerWonTimes, int ComputerWonTimes, int Dr
 	cout << "\t\t\t\t\t\t+++ G a m e  O v e r +++\n\n";
 	cout << "\t\t\t____________________________________________________________________\n\n";
 	cout << "\t\t\t____________________________[Game Results]__________________________\n\n";
-	cout << "Game Rounds       : " << GameRounds << endl;
-	cout << "Player Won Times  : " << PlayerWonTimes << endl;
-	cout << "Computer Won Times: " << ComputerWonTimes << endl;
-	cout << "Draw Times        : " << DrawTimes << endl;
-	cout << "Final Winner      :" << WhoIsWinner(FinalWinner(PlayerWonTimes, ComputerWonTimes, Status));
+	cout << "\t\t\tGame Rounds       : " << GameRounds << endl;
+	cout << "\t\t\tPlayer Won Times  : " << PlayerWonTimes << endl;
+	cout << "\t\t\tComputer Won Times: " << ComputerWonTimes << endl;
+	cout << "\t\t\tDraw Times        : " << DrawTimes << endl;
+	cout << "\t\t\tFinal Winner      : " << WhoIsWinner(FinalWinner(PlayerWonTimes, ComputerWonTimes, Status));
 	cout << "\t\t\t____________________________________________________________________\n\n";
 }
 
