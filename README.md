@@ -1,4 +1,4 @@
 # Projects
 Stone Paper Scissor Game
-Math Game
+, Math Game
 Code
