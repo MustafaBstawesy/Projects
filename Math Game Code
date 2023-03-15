@@ -1,0 +1,282 @@
+#include <iostream>
+#include <cstdlib>
+#include <stdlib.h>
+#include <string>
+using namespace std;
+
+int NumberOp = 0;
+
+enum enQuestionLevel { Easy = 1, Medium = 2, Hard = 3, MixLevel = 4 };
+enum enOperationType { Addition = 1, Subtraction = 2, Multiplication = 3, Division = 4, MixType = 5 };
+
+struct stFinalResults
+{
+	int NumberOfQuestions = 0, NumberOfRightAnswers = 0, NumberOfWrongAnswers = 0;
+	enQuestionLevel QuestionLevel;
+	enOperationType OperationType;
+};
+
+struct stQuestionStatus
+{
+	int NumberOfQuestions = 0, FirstNumber = 0, SecondNumber = 0;
+};
+
+void RedColor()
+{
+	system("color 4F");
+}
+
+void GreenColor()
+{
+	system("color 2F");
+}
+
+int ReadPositiveNumber(string Message)
+{
+	int Number = 0;
+	do
+	{
+		cout << Message;
+		cin >> Number;
+
+	} while (Number < 0);
+
+	return Number;
+}
+
+int RandomNumber(int From, int To)
+{
+	int Rand = rand() % (To - From + 1) + From;
+	return Rand;
+}
+
+void ResetScreen()
+{
+	system("cls");
+	system("color 0F");
+}
+
+string OperationTypeMark(enOperationType Op)
+{
+	switch (Op)
+	{
+	case enOperationType::Addition:
+		return "+";
+	case enOperationType::Subtraction:
+		return "-";
+	case enOperationType::Multiplication:
+		return "*";
+	case enOperationType::Division:
+		return "/";
+	case enOperationType::MixType:
+		NumberOp = RandomNumber(1, 4);
+		if (NumberOp == enOperationType::Addition)
+			return "+";
+		else if (NumberOp == enOperationType::Subtraction)
+			return "-";
+		else if (NumberOp == enOperationType::Multiplication)
+			return "*";
+		else if (NumberOp == enOperationType::Division)
+			return "/";
+	}
+}
+
+int CalculateMathematicalRelationship(stQuestionStatus Calculate, enOperationType Operation)
+{
+	switch (Operation)
+	{
+	case enOperationType::Addition:
+		return Calculate.FirstNumber + Calculate.SecondNumber;
+	case enOperationType::Subtraction:
+		return Calculate.FirstNumber - Calculate.SecondNumber;
+	case enOperationType::Multiplication:
+		return Calculate.FirstNumber * Calculate.SecondNumber;
+	case enOperationType::Division:
+		return Calculate.FirstNumber / Calculate.SecondNumber;
+	case enOperationType::MixType:
+		if (NumberOp == enOperationType::Addition)
+			return Calculate.FirstNumber + Calculate.SecondNumber;
+		else if (NumberOp == enOperationType::Subtraction)
+			return Calculate.FirstNumber - Calculate.SecondNumber;
+		else if (NumberOp == enOperationType::Multiplication)
+			return Calculate.FirstNumber * Calculate.SecondNumber;
+		else if (NumberOp == enOperationType::Division)
+			return Calculate.FirstNumber / Calculate.SecondNumber;
+	}
+}
+
+void Line()
+{
+	cout << "____________________________________\n\n";
+}
+
+bool IsRightWrong(int N, stQuestionStatus Info, enOperationType Op)
+{
+	return (N == CalculateMathematicalRelationship(Info, Op));
+}
+
+string ReturnRightWrong(int N, stQuestionStatus& Info, enOperationType Op, stFinalResults& Res)
+{
+	if (!IsRightWrong(N, Info, Op))
+	{
+		Res.NumberOfWrongAnswers++;
+		RedColor();
+		return "\n Wrong Answer : -(\n\nThe Right Answer Is :" + to_string(CalculateMathematicalRelationship(Info, Op));
+	}
+	else
+	{
+		Res.NumberOfRightAnswers++;
+		GreenColor();
+		return "\n Right Answer :-) \n";
+	}
+}
+
+void PrintQuestionResults(stQuestionStatus& Info, enOperationType Op, stFinalResults& Res, int Counter)
+{
+	int GetNumber;
+	Line();
+	cout << "Questions [" << Counter << "/" << Info.NumberOfQuestions << "]" << "\n\n";
+	cout << Info.FirstNumber << endl;
+	cout << Info.SecondNumber << " " << OperationTypeMark(Op) << endl;
+	cout << "_____________________\n";
+	cin >> GetNumber;
+	cout << ReturnRightWrong(GetNumber, Info, Op, Res) << endl;
+}
+
+string FinalResult(stFinalResults Info)
+{
+	if (Info.NumberOfRightAnswers > Info.NumberOfWrongAnswers)
+	{
+		GreenColor();
+		return " PASS :-) ";
+	}
+	else
+	{
+		RedColor();
+		return " FAIL :-( ";
+	}
+}
+
+string QuestonsLevel(enQuestionLevel Level)
+{
+	string ArrGameChoices[4] = { "Easy" , "Medium" , "Hard" , "Mix" };
+	return ArrGameChoices[Level - 1];
+}
+
+void PrintFinalResults(stFinalResults ResultsInfo, enQuestionLevel LevelInfo, enOperationType OpInfo,stQuestionStatus StatueInfo)
+{
+	Line();
+	cout << "Final Results is" << FinalResult(ResultsInfo) << endl;
+	Line();
+	cout << "\nNumber Of Questions    : " << StatueInfo.NumberOfQuestions << endl;
+	cout << "Questions Level        : " << QuestonsLevel(LevelInfo) << endl;
+	cout << "Operation Type         : " << ReadOperationType(OpInfo) << endl;
+	cout << "Number Of Right Numbers: " << ResultsInfo.NumberOfRightAnswers << endl;
+	cout << "Number Of Wrong Numbers: " << ResultsInfo.NumberOfWrongAnswers << "\n\n";
+	Line();
+}
+
+void ReadNumberOfQuestions(stQuestionStatus& QuestionStatusInfo)
+{
+	QuestionStatusInfo.NumberOfQuestions = ReadPositiveNumber("How Many Questions Do You Want to Answer ? ");
+}
+
+string ReadOperationType(enOperationType Type)
+{
+	string ArrGameChoices[5] = { "Addition" , "Subtraction" , "Multiplication" , "Division" ,"Mix" };
+	return ArrGameChoices[Type - 1];
+}
+
+void Examples(enQuestionLevel QuestionLevelInfo, stQuestionStatus& QuestionStatusInfo)
+{
+	int Number = 0;
+	switch (QuestionLevelInfo)
+	{
+	case enQuestionLevel::Easy:
+		QuestionStatusInfo.FirstNumber = RandomNumber(1, 9);
+		QuestionStatusInfo.SecondNumber = RandomNumber(1, 9);
+		break;
+	case enQuestionLevel::Medium:
+		QuestionStatusInfo.FirstNumber = RandomNumber(10, 99);
+		QuestionStatusInfo.SecondNumber = RandomNumber(10, 99);
+		break;
+	case enQuestionLevel::Hard:
+		QuestionStatusInfo.FirstNumber = RandomNumber(100, 999);
+		QuestionStatusInfo.SecondNumber = RandomNumber(100, 999);
+		break;
+	case enQuestionLevel::MixLevel:
+		Number = RandomNumber(1, 3);
+		if (Number == enQuestionLevel::Easy)
+		{
+			QuestionStatusInfo.FirstNumber = RandomNumber(1, 9);
+			QuestionStatusInfo.SecondNumber = RandomNumber(1, 9);
+		}
+		else if (Number == enQuestionLevel::Medium)
+		{
+			QuestionStatusInfo.FirstNumber = RandomNumber(10, 99);
+			QuestionStatusInfo.SecondNumber = RandomNumber(10, 99);
+		}
+		else if (Number == enQuestionLevel::Hard)
+		{
+			QuestionStatusInfo.FirstNumber = RandomNumber(100, 999);
+			QuestionStatusInfo.SecondNumber = RandomNumber(100, 999);
+		}
+	}
+}
+
+enQuestionLevel ReadPlayer1ChoiceLevel()
+{
+	short Choice = 1;
+	do
+	{
+		cout << "\nYour Choice: [1]:Easy, [2]:Medium, [3]:Hard, [4]:Mix ? ";
+		cin >> Choice;
+	} while (Choice < 1 || Choice > 4);
+	return (enQuestionLevel)Choice;
+};
+
+enOperationType ReadPlayer1ChoiceType()
+{
+	short Choice = 1;
+	do
+	{
+		cout << "\nYour Choice: [1]:Addition, [2]:Subtraction, [3]:Multiplication, [4]:Division, [5]:Mix ? ";
+		cin >> Choice;
+	} while (Choice < 1 || Choice >5);
+	return (enOperationType)Choice;
+};
+
+void PlayGame(stFinalResults& FinalResults, stQuestionStatus& QuestionStatusInfo, enQuestionLevel& QuestionLevelInfo, enOperationType& OperationTypeInfo)
+{
+	ReadNumberOfQuestions(QuestionStatusInfo);
+	QuestionLevelInfo = ReadPlayer1ChoiceLevel();
+	OperationTypeInfo = ReadPlayer1ChoiceType();
+	for (int Counter = 1; Counter <= QuestionStatusInfo.NumberOfQuestions; Counter++)
+	{
+		Examples(QuestionLevelInfo, QuestionStatusInfo);
+		PrintQuestionResults(QuestionStatusInfo, OperationTypeInfo, FinalResults, Counter);
+	}
+}
+
+void StartGame()
+{
+	stFinalResults FinalResults;
+	stQuestionStatus QuestionStatusInfo;
+	enQuestionLevel QuestionLevelInfo;
+	enOperationType OperationTypeInfo;
+	char PlayAgain = 'Y';
+	do
+	{
+		ResetScreen();		
+		PlayGame(FinalResults, QuestionStatusInfo, QuestionLevelInfo, OperationTypeInfo);
+		PrintFinalResults(FinalResults, QuestionLevelInfo, OperationTypeInfo,QuestionStatusInfo);
+		cout << "\nDo you want to play again? Y/N? ";
+		cin >> PlayAgain;
+	} while (PlayAgain == 'Y' || PlayAgain == 'y');
+}
+
+int main()
+{
+	srand((unsigned)time(NULL));
+	StartGame();
+}
