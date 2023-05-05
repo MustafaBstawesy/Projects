@@ -1,3 +1,3 @@
 # Projects
-Stone Paper Scissor Game Math Game
+Stone Paper Scissor Game - Math Game - Bank System
 Code
