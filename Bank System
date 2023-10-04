@@ -14,6 +14,7 @@ string UserNameOfCurruntUser;
 void ShowMainMenue();
 void ShowTransactionsMenue();
 void ShowManageUsersScreen();
+void LoginScreen();
 
 struct stClient
 {
@@ -593,14 +594,6 @@ void ShowFindClientScreen()
 
 }
 
-void ShowEndScreen()
-{
-    cout << "\n-----------------------------------\n";
-    cout << "\tProgram Ends :-)";
-    cout << "\n-----------------------------------\n";
-
-}
-
 void ShowDepositScreen()
 {
     cout << "\n-----------------------------------\n";
@@ -745,14 +738,14 @@ void ShowTransactionsMenue()
     PerfromTranactionsMenueOption((enTransactionsMenueOptions)ReadTransactionsMenueOption());
 }
 
-struct stOpstions
+struct stOptions
 {
     char ShowClientList, AddNewClient, DeleteClient, UpdateClient, FindClient, Transaction, ManageUsers;
 };
 
-stOpstions ReadAccessOptions()
+stOptions ReadAccessOptions()
 {
-    stOpstions Option;
+    stOptions Option;
     cout << "Do You Want To Give Access To :\n\n";
 
     cout << "Show Client List? Y/N?";
@@ -779,7 +772,7 @@ stOpstions ReadAccessOptions()
     return Option;
 }
 
-short CalcualteBinaryValue(stOpstions Options)
+short CalcualteBinaryValue(stOptions Options)
 {
     short BinaryValue = 0;
     short BinaryNumberSystemBase = 2;
@@ -1031,6 +1024,20 @@ bool ClientExistsByUserName(string UserName, string FileName)
 
 }
 
+stAccess GiveAccessOrNot(stAccess User)
+{
+    char ValidateAccess;
+    cout << "\n\nDo You Want To Give Full Access? y/n?";
+    cin >> ValidateAccess;
+
+    if (toupper(ValidateAccess) == 'Y')
+        User.Permission = -1;
+    else
+        User.Permission = CalcualteBinaryValue(ReadAccessOptions());
+
+    return User;
+}
+
 stAccess ReadNewUser()
 {
     stAccess User;
@@ -1049,14 +1056,7 @@ stAccess ReadNewUser()
     cout << "Enter Password? ";
     getline(cin, User.Password);
 
-    char ValidateAccess;
-    cout << "\n\nDo You Want To Give Full Access? y/n?";
-    cin >> ValidateAccess;
-
-    if (toupper(ValidateAccess) == 'Y')
-        User.Permission = -1;
-    else
-        User.Permission = CalcualteBinaryValue(ReadAccessOptions());
+    User = GiveAccessOrNot(User);
 
     return User;
 }
@@ -1081,7 +1081,7 @@ void AddNewUser()
     AddDataLineToFile(UsersFileName, ConvertRecordToLineUsers(User));
 }
 
-void AddNewUsers()
+void ShowAddNewUsers()
 {
     cout << "\n-----------------------------------\n";
     cout << "\tAdd New User Screen";
@@ -1234,6 +1234,75 @@ void ShowFindUserScreen()
         cout << "\nUser with User Name[" << UserName << "] is not found!";
 }
 
+stAccess ChangeUserRecord(string UserName)
+{
+    stAccess User;
+
+    User.Admin = UserName;
+
+    cout << "\n\nEnter Password? ";
+    getline(cin >> ws, User.Password);
+
+    User = GiveAccessOrNot(User);
+
+    return User;
+
+}
+
+bool UpdateUserByUserName(string UserName, vector <stAccess>& vUsers)
+{
+
+    stAccess User;
+    char Answer = 'n';
+
+    if (FindUserByUserName(UserName, vUsers, User))
+    {
+
+        PrintUserCard(User);
+        cout << "\n\nAre you sure you want update this User? y/n ? ";
+        cin >> Answer;
+        if (Answer == 'y' || Answer == 'Y')
+        {
+
+            for (stAccess& C : vUsers)
+            {
+                if (C.Admin == UserName)
+                {
+                    C = ChangeUserRecord(UserName);
+                    break;
+                }
+
+            }
+
+            SaveUsersDataToFile(UsersFileName, vUsers);
+
+            cout << "\n\nUser Updated Successfully.";
+            return true;
+        }
+
+    }
+    else
+    {
+        cout << "\nUser with User Name (" << UserName << ") is Not Found!";
+        return false;
+    }
+
+}
+
+
+
+void ShowUpdateUserScreen()
+{
+    cout << "\n-----------------------------------\n";
+    cout << "\tUpdate User Screen";
+    cout << "\n-----------------------------------\n";
+
+    vector <stAccess> vUsers = LoadUsersDataFromFile(UsersFileName);
+    string UserName = ReadUserName();
+    UpdateUserByUserName(UserName, vUsers);
+
+}
+
 void GoBackToMangeUsersMenue()
 {
     cout << "\nPress any key to go back to Mange Users Menue...";
@@ -1253,7 +1322,7 @@ void PerformMangeUsersOption(enManageUsers MangeUsersOption)
         break;
     case enManageUsers::eAddNewUser:
         system("cls");
-        AddNewUsers();
+        ShowAddNewUsers();
         GoBackToMangeUsersMenue();
         break;
     case enManageUsers::eDeleteUser:
@@ -1263,7 +1332,8 @@ void PerformMangeUsersOption(enManageUsers MangeUsersOption)
         break;
     case enManageUsers::eUpdateUser:
         system("cls");
-
+        ShowUpdateUserScreen();
+        GoBackToMangeUsersMenue();
         break;
     case enManageUsers::eFindUser:
         system("cls");
@@ -1321,7 +1391,7 @@ enMainMenueOptions ValidateMainMainMenue(enMainMenueOptions MainMenueOption)
                 return MainMenueOption;
             }
         }
-    }        
+    }
 }
 
 void PerfromMainMenueOption(enMainMenueOptions MainMenueOption)
@@ -1374,7 +1444,7 @@ void PerfromMainMenueOption(enMainMenueOptions MainMenueOption)
 
     case enMainMenueOptions::eLogout:
         system("cls");
-        ShowEndScreen();
+        LoginScreen();
         break;
 
     default:
@@ -1445,7 +1515,7 @@ void WelcomMessage()
     ShowLoginScreen();
     cout << "Username & Password Are Right !\n\n";
     cout << "Welcome to Our Bank System Program.\n";
-    cout << "\n\nPress any key to go to Main Menue...";
+    cout << "\n\n\n\n\n\n\n\Press any key to go to Main Menue...";
     system("pause>0");
 }
 
