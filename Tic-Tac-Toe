@@ -1,0 +1,274 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Tic_Tac_Toe.Properties;
+
+namespace Tic_Tac_Toe
+{
+    public partial class Form1 : Form
+    {
+        byte RoundNumber = 0;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        enum enPlayers
+        {
+            Player1 = 1 , Player2 = 2
+        };
+
+        bool[,] ArrButtonStatus = { { false, false, false, }
+                               , { false, false, false, }
+                               , { false, false, false } };
+
+        char[,] GameStatus = new char[3, 3];
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Color Black = Color.Gray;
+
+
+            Pen Pen = new Pen(Black);
+            Pen.Width = 5;
+
+            Pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+            Pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+
+            e.Graphics.DrawLine(Pen, 610, 50, 610, 400);
+            e.Graphics.DrawLine(Pen, 475, 50, 475, 400);
+
+
+            e.Graphics.DrawLine(Pen, 330, 170, 750, 170);
+            e.Graphics.DrawLine(Pen, 330, 280, 750, 280);
+
+        }
+        void PlayTurn(Button Button , ref char XO)
+        {
+            RoundNumber++;
+
+            if (labelWhichOne.Text == Convert.ToString(enPlayers.Player1))
+            {
+                XO = 'X';
+                Button.Image = Resources.X;
+                labelWhichOne.Text = Convert.ToString(enPlayers.Player2);
+            }
+            else
+            {
+                XO = 'O';
+                Button.Image = Resources.O;
+                labelWhichOne.Text = Convert.ToString(enPlayers.Player1);
+            }
+        }
+        void WrongChoice()
+        {
+            MessageBox.Show("Wrong Choice", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        bool XOImplemetation(char XO)
+        {
+            if (GameStatus[0, 0] == XO && GameStatus[0, 1] == XO && GameStatus[0, 2] == XO)
+            {
+                button1.BackColor = Color.Green;
+                button2.BackColor = Color.Green;
+                button3.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[1, 0] == XO && GameStatus[1, 1] == XO && GameStatus[1, 2] == XO)
+            {
+                button4.BackColor = Color.Green;
+                button5.BackColor = Color.Green;
+                button6.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[2, 0] == XO && GameStatus[2, 1] == XO && GameStatus[2, 2] == XO)
+            {
+                button7.BackColor = Color.Green;
+                button8.BackColor = Color.Green;
+                button9.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[0, 0] == XO && GameStatus[1, 0] == XO && GameStatus[2, 0] == XO)
+            {
+                button1.BackColor = Color.Green;
+                button4.BackColor = Color.Green;
+                button7.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[0, 1] == XO && GameStatus[1, 1] == XO && GameStatus[2, 1] == XO)
+            {
+                button2.BackColor = Color.Green;
+                button5.BackColor = Color.Green;
+                button8.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[0, 2] == XO && GameStatus[1, 2] == XO && GameStatus[2, 2] == XO)
+            {
+                button3.BackColor = Color.Green;
+                button6.BackColor = Color.Green;
+                button9.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[0, 0] == XO && GameStatus[1, 1] == XO && GameStatus[2, 2] == XO)
+            {
+                button1.BackColor = Color.Green;
+                button5.BackColor = Color.Green;
+                button9.BackColor = Color.Green;
+                return true;
+            }
+            else if (GameStatus[0, 2] == XO && GameStatus[1, 1] == XO && GameStatus[2, 0] == XO)
+            {
+                button3.BackColor = Color.Green;
+                button5.BackColor = Color.Green;
+                button7.BackColor = Color.Green;
+                return true;
+            }
+            return false;
+        }              
+        void GameOver()
+        {
+            labelMatchStatus.Text = "Game Over";
+        }
+        string GameDraw()
+        {
+            return labelMatchStatus.Text = "   Draw";
+        }
+        void WinMessageBox()
+        {
+            MessageBox.Show("Game Over", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        void DetermineTheWinner()
+        {
+            if (XOImplemetation('X'))
+            {
+                labelWhichOne.Text = "Player1";
+                GameOver();
+                WinMessageBox();
+            }
+            else if (XOImplemetation('O'))
+            {
+                labelWhichOne.Text = "Player2";
+                GameOver();
+                WinMessageBox();
+            }
+
+            if (labelMatchStatus.Text == "In Progress" && RoundNumber == 9)
+                labelMatchStatus.Text = GameDraw();
+
+        }
+
+        void PressButton(Button Button,byte Row , byte Column)
+        {
+
+            char XO = ' ';
+
+            if (ArrButtonStatus[Row, Column] == false)
+                PlayTurn(Button, ref XO);
+            else
+            {
+                WrongChoice();
+                return;
+            }
+
+            ArrButtonStatus[Row, Column] = true;
+
+            if (XO == 'X')
+                GameStatus[Row, Column] = 'X';
+            else
+                GameStatus[Row, Column] = 'O';
+
+            DetermineTheWinner();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            PressButton(button1, 0, 0);
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {          
+            PressButton(button2, 0, 1);
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            PressButton(button3, 0, 2);
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            PressButton(button4, 1, 0);
+        }
+        private void button5_Click(object sender, EventArgs e)
+        {
+            PressButton(button5, 1, 1);
+        }
+        private void button6_Click(object sender, EventArgs e)
+        {
+            PressButton(button6, 1, 2);
+        }
+        private void button7_Click(object sender, EventArgs e)
+        {
+            PressButton(button7, 2, 0);
+        }
+        private void button8_Click(object sender, EventArgs e)
+        {
+            PressButton(button8, 2, 1);
+        }
+        private void button9_Click(object sender, EventArgs e)
+        {
+            PressButton(button9, 2, 2);
+        }
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            button1.Image = Resources.question_mark_96;
+            button2.Image = Resources.question_mark_96;
+            button3.Image = Resources.question_mark_96;
+            button4.Image = Resources.question_mark_96;
+            button5.Image = Resources.question_mark_96;
+            button6.Image = Resources.question_mark_96;
+            button7.Image = Resources.question_mark_96;
+            button8.Image = Resources.question_mark_96;
+            button9.Image = Resources.question_mark_96;
+
+            button1.BackColor = Color.Transparent;
+            button2.BackColor = Color.Transparent;
+            button3.BackColor = Color.Transparent;
+            button4.BackColor = Color.Transparent;
+            button5.BackColor = Color.Transparent;
+            button6.BackColor = Color.Transparent;
+            button7.BackColor = Color.Transparent;
+            button8.BackColor = Color.Transparent;
+            button9.BackColor = Color.Transparent;
+
+            labelWhichOne.Text = "Player1";
+            labelWinDraw.Text = "Winner";
+            labelMatchStatus.Text = "In Progress";
+
+            RoundNumber = 0;
+
+            ArrButtonStatus[0, 0] = false;
+            ArrButtonStatus[0, 1] = false;
+            ArrButtonStatus[0, 2] = false;
+            ArrButtonStatus[1, 0] = false;
+            ArrButtonStatus[1, 1] = false;
+            ArrButtonStatus[1, 2] = false;
+            ArrButtonStatus[2, 0] = false;
+            ArrButtonStatus[2, 1] = false;
+            ArrButtonStatus[2, 2] = false;
+
+            GameStatus[0, 0]  = ' ';
+            GameStatus[0, 1]  = ' ';
+            GameStatus[0, 2]  = ' ';
+            GameStatus[1, 0]  = ' ';
+            GameStatus[1, 1]  = ' ';
+            GameStatus[1, 2]  = ' ';
+            GameStatus[2, 0]  = ' ';
+            GameStatus[2, 1]  = ' ';
+            GameStatus[2, 2]  = ' ';
+       
+        }
+
+    }
+}
