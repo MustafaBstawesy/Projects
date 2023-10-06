@@ -1,11 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Tic_Tac_Toe.Properties;
 
@@ -24,11 +18,9 @@ namespace Tic_Tac_Toe
             Player1 = 1 , Player2 = 2
         };
 
-        bool[,] ArrButtonStatus = { { false, false, false, }
-                               , { false, false, false, }
-                               , { false, false, false } };
-
-        char[,] GameStatus = new char[3, 3];
+        char[,] GameStatus = { { ' ', ' ', ' ', }
+                               , { ' ', ' ', ' ', }
+                               , { ' ', ' ', ' ' } };
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             Color Black = Color.Gray;
@@ -43,10 +35,8 @@ namespace Tic_Tac_Toe
             e.Graphics.DrawLine(Pen, 610, 50, 610, 400);
             e.Graphics.DrawLine(Pen, 475, 50, 475, 400);
 
-
             e.Graphics.DrawLine(Pen, 330, 170, 750, 170);
             e.Graphics.DrawLine(Pen, 330, 280, 750, 280);
-
         }
         void PlayTurn(Button Button , ref char XO)
         {
@@ -158,15 +148,13 @@ namespace Tic_Tac_Toe
 
             char XO = ' ';
 
-            if (ArrButtonStatus[Row, Column] == false)
+            if (GameStatus[Row, Column] == ' ')
                 PlayTurn(Button, ref XO);
             else
             {
                 WrongChoice();
                 return;
             }
-
-            ArrButtonStatus[Row, Column] = true;
 
             if (XO == 'X')
                 GameStatus[Row, Column] = 'X';
@@ -239,16 +227,6 @@ namespace Tic_Tac_Toe
             labelMatchStatus.Text = "In Progress";
 
             RoundNumber = 0;
-
-            ArrButtonStatus[0, 0] = false;
-            ArrButtonStatus[0, 1] = false;
-            ArrButtonStatus[0, 2] = false;
-            ArrButtonStatus[1, 0] = false;
-            ArrButtonStatus[1, 1] = false;
-            ArrButtonStatus[1, 2] = false;
-            ArrButtonStatus[2, 0] = false;
-            ArrButtonStatus[2, 1] = false;
-            ArrButtonStatus[2, 2] = false;
 
             GameStatus[0, 0]  = ' ';
             GameStatus[0, 1]  = ' ';
