@@ -8,7 +8,6 @@ namespace Tic_Tac_Toe
     public partial class Form1 : Form
     {
         byte RoundNumber = 0;
-
         public Form1()
         {
             InitializeComponent();
@@ -16,11 +15,7 @@ namespace Tic_Tac_Toe
         enum enPlayers
         {
             Player1 = 1 , Player2 = 2
-        };
-
-        char[,] GameStatus = { { ' ', ' ', ' ', }
-                               , { ' ', ' ', ' ', }
-                               , { ' ', ' ', ' ' } };
+        }; 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             Color Black = Color.Gray;
@@ -38,19 +33,19 @@ namespace Tic_Tac_Toe
             e.Graphics.DrawLine(Pen, 330, 170, 750, 170);
             e.Graphics.DrawLine(Pen, 330, 280, 750, 280);
         }
-        void PlayTurn(Button Button , ref char XO)
+        void PlayTurn(Button Button)
         {
             RoundNumber++;
 
             if (labelWhichOne.Text == Convert.ToString(enPlayers.Player1))
             {
-                XO = 'X';
+                Button.Tag = "X";
                 Button.Image = Resources.X;
                 labelWhichOne.Text = Convert.ToString(enPlayers.Player2);
             }
             else
             {
-                XO = 'O';
+                Button.Tag = "O";
                 Button.Image = Resources.O;
                 labelWhichOne.Text = Convert.ToString(enPlayers.Player1);
             }
@@ -59,62 +54,66 @@ namespace Tic_Tac_Toe
         {
             MessageBox.Show("Wrong Choice", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
         void GetGreenColorForButtons(Button Button1, Button Button2, Button Button3)
         {
             Button1.BackColor = Color.Green;
             Button2.BackColor = Color.Green;
             Button3.BackColor = Color.Green;
         }
-
-        bool XOLogic(char XO)
+        public bool CheckValues(Button Button1, Button Button2, Button Button3)
         {
-            if (GameStatus[0, 0] == XO && GameStatus[0, 1] == XO && GameStatus[0, 2] == XO)
-            {      
-                GetGreenColorForButtons(button1 , button2, button3);
-                return true;
-            }
-            else if (GameStatus[1, 0] == XO && GameStatus[1, 1] == XO && GameStatus[1, 2] == XO)
+            if (Button1.Tag.ToString() != " " && Button1.Tag.ToString() == Button2.Tag.ToString() && Button1.Tag.ToString() == Button3.Tag.ToString())
             {
-                GetGreenColorForButtons(button4, button5, button6);
-                return true;
+                GetGreenColorForButtons(Button1, Button2, Button3);
+
+                if (Button1.Tag.ToString() == "X")
+                {
+                    labelWhichOne.Text = "Player1";
+                    GameOver();
+                    WinMessageBox();
+                    Disable_EnableAllButtons(false);
+                    return true;
+                }
+                else
+                {
+                    labelWhichOne.Text = "Player2";
+                    GameOver();
+                    WinMessageBox();
+                    Disable_EnableAllButtons(false);
+                    return true;
+                }
             }
-            else if (GameStatus[2, 0] == XO && GameStatus[2, 1] == XO && GameStatus[2, 2] == XO)
-            {
-                GetGreenColorForButtons(button7, button8, button9);
-                return true;
-            }
-            else if (GameStatus[0, 0] == XO && GameStatus[1, 0] == XO && GameStatus[2, 0] == XO)
-            {
-                GetGreenColorForButtons(button1, button4, button7); 
-                return true;
-            }
-            else if (GameStatus[0, 1] == XO && GameStatus[1, 1] == XO && GameStatus[2, 1] == XO)
-            {
-                GetGreenColorForButtons(button2, button5, button8);
-                return true;
-            }
-            else if (GameStatus[0, 2] == XO && GameStatus[1, 2] == XO && GameStatus[2, 2] == XO)
-            {
-                GetGreenColorForButtons(button3, button6, button9);
-                return true;
-            }
-            else if (GameStatus[0, 0] == XO && GameStatus[1, 1] == XO && GameStatus[2, 2] == XO)
-            {     
-                GetGreenColorForButtons(button1, button5, button9);
-                return true;
-            }
-            else if (GameStatus[0, 2] == XO && GameStatus[1, 1] == XO && GameStatus[2, 0] == XO)
-            {
-                GetGreenColorForButtons(button3, button5, button7);
-                return true;
-            }
+
+            if (labelMatchStatus.Text == "In Progress" && RoundNumber == 9)
+                labelMatchStatus.Text = GameDraw();
+
             return false;
-        }              
+        }       
         void GameOver()
         {
             labelMatchStatus.Text = "Game Over";
         }
+        bool IsGameOver()
+        {
+            return labelMatchStatus.Text == "Game Over";
+        }
+
+        void Disable_EnableAllButtons(bool True_False)
+        {
+            if (IsGameOver() || RoundNumber <= 0)
+            {
+                button1.Enabled = True_False;
+                button2.Enabled = True_False;
+                button3.Enabled = True_False;
+                button4.Enabled = True_False;
+                button5.Enabled = True_False;
+                button6.Enabled = True_False;
+                button7.Enabled = True_False;
+                button8.Enabled = True_False;
+                button9.Enabled = True_False;
+            }
+        }
+
         string GameDraw()
         {
             return labelMatchStatus.Text = "   Draw";
@@ -125,82 +124,49 @@ namespace Tic_Tac_Toe
         }
         void DetermineTheWinner()
         {
-            if (XOLogic('X'))
-            {
-                labelWhichOne.Text = "Player1";
-                GameOver();
-                WinMessageBox();
-            }
-            else if (XOLogic('O'))
-            {
-                labelWhichOne.Text = "Player2";
-                GameOver();
-                WinMessageBox();
-            }
 
-            if (labelMatchStatus.Text == "In Progress" && RoundNumber == 9)
-                labelMatchStatus.Text = GameDraw();
+            if (CheckValues(button1, button2, button3))
+                return;
 
+            if (CheckValues(button4, button5, button6))
+                return;
+
+            if (CheckValues(button7, button8, button9))
+                return;
+
+            if (CheckValues(button1, button4, button7))
+                return;
+
+            if (CheckValues(button2, button5, button8))
+                return;
+
+            if (CheckValues(button3, button6, button9))
+                return;
+
+            if (CheckValues(button1, button5, button9))
+                return;
+
+            if (CheckValues(button3, button5, button7))
+                return;       
         }
-
-        void PressButton(Button Button,byte Row , byte Column)
+        void PressButton(Button Button)
         {
 
-            char XO = ' ';
-
-            if (GameStatus[Row, Column] == ' ')
-                PlayTurn(Button, ref XO);
+            if (Button.Tag.ToString() == " ")
+                PlayTurn(Button);
             else
             {
                 WrongChoice();
                 return;
             }
-
-            if (XO == 'X')
-                GameStatus[Row, Column] = 'X';
-            else
-                GameStatus[Row, Column] = 'O';
-
+  
             DetermineTheWinner();
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void Button_Click(object sender, EventArgs e)
         {
-            PressButton(button1, 0, 0);
+            PressButton((Button)sender);
         }
-        private void button2_Click(object sender, EventArgs e)
-        {          
-            PressButton(button2, 0, 1);
-        }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            PressButton(button3, 0, 2);
-        }
-        private void button4_Click(object sender, EventArgs e)
-        {
-            PressButton(button4, 1, 0);
-        }
-        private void button5_Click(object sender, EventArgs e)
-        {
-            PressButton(button5, 1, 1);
-        }
-        private void button6_Click(object sender, EventArgs e)
-        {
-            PressButton(button6, 1, 2);
-        }
-        private void button7_Click(object sender, EventArgs e)
-        {
-            PressButton(button7, 2, 0);
-        }
-        private void button8_Click(object sender, EventArgs e)
-        {
-            PressButton(button8, 2, 1);
-        }
-        private void button9_Click(object sender, EventArgs e)
-        {
-            PressButton(button9, 2, 2);
-        }
-        private void btnRestart_Click(object sender, EventArgs e)
+        void RestartGame()
         {
             button1.Image = Resources.question_mark_96;
             button2.Image = Resources.question_mark_96;
@@ -222,23 +188,29 @@ namespace Tic_Tac_Toe
             button8.BackColor = Color.Transparent;
             button9.BackColor = Color.Transparent;
 
+            button1.Tag = " ";
+            button2.Tag = " ";
+            button3.Tag = " ";
+            button4.Tag = " ";
+            button5.Tag = " ";
+            button6.Tag = " ";
+            button7.Tag = " ";
+            button8.Tag = " ";
+            button9.Tag = " ";
+
             labelWhichOne.Text = "Player1";
             labelWinDraw.Text = "Winner";
             labelMatchStatus.Text = "In Progress";
 
             RoundNumber = 0;
 
-            GameStatus[0, 0]  = ' ';
-            GameStatus[0, 1]  = ' ';
-            GameStatus[0, 2]  = ' ';
-            GameStatus[1, 0]  = ' ';
-            GameStatus[1, 1]  = ' ';
-            GameStatus[1, 2]  = ' ';
-            GameStatus[2, 0]  = ' ';
-            GameStatus[2, 1]  = ' ';
-            GameStatus[2, 2]  = ' ';
-       
+            Disable_EnableAllButtons(true);
+
         }
 
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            RestartGame();
+        }     
     }
 }
