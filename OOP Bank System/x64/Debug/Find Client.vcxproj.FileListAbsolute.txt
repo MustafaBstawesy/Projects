@@ -1,0 +1,3 @@
+D:\Studies\PL\OOP as it should be\Find Client\x64\Debug\Find Client.exe
+D:\Studies\PL\OOP Applications\OOP Bank System\x64\Debug\OOP Bank System.exe
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\x64\Debug\OOP Bank System.exe
