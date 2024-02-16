@@ -1,0 +1,672 @@
+#include <iostream>
+#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
+using namespace std;
+
+enum enCases { // all cases
+	ThreeSidesAreGiven = 1,
+	ThreeAnglesAreGiven = 2,
+	TwoSidesAndTheIncludedAngle = 3,
+	TwoAnglesAndTheSideBetweenThem = 4,
+	TwoAnglesAndTheSideNotBetweenThem = 5,
+	TwoSidesAndTheAngleNotIncluded = 6,
+	RightAngleTriangle = 7
+};
+
+struct stAngles // to receive the value of angles
+{
+	float A = 0;
+	float B = 0;
+	float C = 0;
+};
+
+struct stSides // to receive the value of sides
+{
+	float a = 0;
+	float b = 0;
+	float c = 0;
+};
+
+float ReadPositiveNumber(string Message) // to get any positive number form user
+{
+	int Number = 0;
+	do
+	{
+		cout << Message;
+		cin >> Number;
+
+	} while (Number < 0);
+
+	return Number;
+}
+
+void ResetScreen() // to make the console is empty screen
+{
+	system("cls");
+}
+
+void Line() // it's a break space 
+{
+	cout << "_____________________________\n";
+}
+
+enCases ReadCase() // to receive the case
+{
+	int CaseNumber = 0;
+	do
+	{
+		cout << "\t   CASES\n\t   -----\n";
+		Line();
+		cout << "\n[1] 3 Sides Are Given. \n[2] 3 Angles Are Given. \n[3] 2 Sides And The Included Angle. \n[4] 2 Angles And The Side Between Them. \n[5] 2 Angles And The Side Not Between Them. \n[6] 2 Sides And The Angle Not Included. \n[7] Right Angle Triangle.\n";
+		Line();
+		cout << "\nEnter Your Case Here : ";
+		cin >> CaseNumber;
+
+	} while (!(CaseNumber >= 1 && CaseNumber <= 7));
+
+	return (enCases)CaseNumber;
+}
+
+string GetCaseText(enCases Case) // to return case text
+{
+	string ArrCaseText[7] = { "3 Sides Are Given","3 Angles Are Given","2 Sides And The Included Angle","2 Angles And The Side Between Them","2 Angles And The Side Not Between Them","2 Sides And The Angle Not Included","Right Angle Triangle" };
+	return ArrCaseText[Case - 1];
+}
+
+int Casting(float Value) // to get int value
+{
+	return Value;
+}
+
+float ReturnDegrees(float Degree) // degree value is here
+{
+	return Casting(Degree);
+}
+
+float ReturnMinutes(float Degree) // minute value is here
+{
+	return (Degree - ReturnDegrees(Degree)) * 60;
+}
+
+float ReturnSeconds(float Degree) // second value is here
+{
+	return (ReturnMinutes(Degree) - Casting(ReturnMinutes(Degree))) * 60;
+}
+
+void DisplayDMS(float Degree) // to print degree minute second values
+{
+	cout << ReturnDegrees(Degree) << " D  " << ReturnMinutes(Degree) << " M  " << ReturnSeconds(Degree) << " S" << endl;
+}
+
+float ToRadian() // degree to radian
+{
+	return (M_PI / 180);
+}
+
+float ToDegree() // radian to degree
+{
+	return (180 / M_PI);
+}
+
+void CaseThreeSidesAreGiven(stSides& Side, stAngles& Angle, enCases& Case)
+{
+	Line();
+	cout << "\nCase : " << GetCaseText(Case) << "\n";
+	Line();
+
+	Side.a = ReadPositiveNumber("\nEnter Side (a) Value : ") * ToRadian();
+	Side.b = ReadPositiveNumber("Enter Side (b) Value : ") * ToRadian();
+	Side.c = ReadPositiveNumber("Enter Side (c) Value : ") * ToRadian();
+	Line();
+
+	Angle.A = acos((cos(Side.a) - (cos(Side.b) * cos(Side.c))) / (sin(Side.b) * sin(Side.c)));
+
+	Angle.B = acos((cos(Side.b) - (cos(Side.a) * cos(Side.c))) / (sin(Side.a) * sin(Side.c)));
+
+	Angle.C = acos((cos(Side.c) - (cos(Side.b) * cos(Side.a))) / (sin(Side.b) * sin(Side.a)));
+
+	cout << "\n A = ";
+	DisplayDMS(Angle.A * ToDegree());
+	cout << "\n";
+
+	cout << " B = ";
+	DisplayDMS(Angle.B * ToDegree());
+	cout << "\n";
+
+	cout << " C = ";
+	DisplayDMS(Angle.C * ToDegree());
+	Line();
+}
+
+void CaseThreeAnglesAreGiven(stSides& Side, stAngles& Angle, enCases& Case)
+{
+	Line();
+	cout << "\nCase : " << GetCaseText(Case) << "\n";
+	Line();
+
+	Angle.A = ReadPositiveNumber("\nEnter Angle (A) Value : ") * ToRadian();
+	Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+	Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+	Line();
+
+	Side.a = acos(cos(Angle.A) + (cos(Angle.B) * cos(Angle.C)) / (sin(Angle.B) * sin(Angle.C)));
+
+	Side.b = acos(cos(Angle.B) + (cos(Angle.A) * cos(Angle.C)) / (sin(Angle.A) * sin(Angle.C)));
+
+	Side.c = acos(cos(Angle.C) + (cos(Angle.B) * cos(Angle.A)) / (sin(Angle.B) * sin(Angle.A)));
+
+	cout << "\n a = ";
+	DisplayDMS(Side.a * ToDegree());
+	cout << "\n";
+
+	cout << " b = ";
+	DisplayDMS(Side.b * ToDegree());
+	cout << "\n";
+
+	cout << " c = ";
+	DisplayDMS(Side.c * ToDegree());
+	Line();
+}
+
+void CaseTwoSidesAndTheIncludedAngle(stSides& Side, stAngles& Angle, enCases& Case)
+{
+	Line();
+	cout << "\nCase : " << GetCaseText(Case) << "\n";
+	Line();
+
+	char Input;
+	cout << " Do You Want (a),(b),(c) ? : ";
+	cin >> Input;
+
+	switch (Input)
+	{
+	case 'a':
+		Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+		Side.b = ReadPositiveNumber("Enter Side  (b) Value : ") * ToRadian();
+		Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+		Side.a = acos((cos(Angle.A) * sin(Side.b)) * sin(Side.c) + (cos(Side.b) * cos(Side.c)));
+
+		cout << "\n a = ";
+		DisplayDMS(Side.a * ToDegree());
+		cout << "\n";
+		break;
+	case 'b':
+		Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+		Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+		Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+		Side.b = acos((cos(Angle.B) * sin(Side.a)) * sin(Side.c) + (cos(Side.a) * cos(Side.c)));
+
+		cout << "\n b = ";
+		DisplayDMS(Side.b * ToDegree());
+		cout << "\n";
+		break;
+	case 'c':
+		Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+		Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+		Side.b = ReadPositiveNumber("Enter Side  (b) Value : ") * ToRadian();
+
+		Side.c = acos((cos(Angle.C) * sin(Side.a)) * sin(Side.b) + (cos(Side.a) * cos(Side.b)));
+
+		cout << "\n c = ";
+		DisplayDMS(Side.c * ToDegree());
+		cout << "\n";
+		break;
+	}
+}
+
+void CaseTwoAnglesAndTheSideBetweenThem(stSides& Side, stAngles& Angle, enCases& Case)
+{
+
+	Line();
+	cout << "\nCase : " << GetCaseText(Case) << "\n";
+	Line();
+
+	char Input;
+	cout << " Do You Want (A),(B),(C) ? : ";
+	cin >> Input;
+
+	switch (Input)
+	{
+	case 'A':
+
+		Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+		Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+		Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+		Angle.A = acos((cos(Side.a) * sin(Angle.B)) - sin(Angle.C) - (cos(Angle.B) * cos(Angle.C)));
+
+		cout << "\n A = ";
+		DisplayDMS(Angle.A * ToDegree());
+		cout << "\n";
+
+		break;
+
+	case 'B':
+
+		Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+		Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+		Side.b = ReadPositiveNumber("Enter Side  (b) Value : ") * ToRadian();
+
+		Angle.B = acos((cos(Side.b) * sin(Angle.A)) - sin(Angle.C) - (cos(Angle.A) * cos(Angle.C)));
+
+		cout << "\n B = ";
+		DisplayDMS(Angle.B * ToDegree());
+		cout << "\n";
+
+		break;
+
+	case 'C':
+
+		Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+		Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+		Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+		Angle.C = acos((cos(Side.c) * sin(Angle.A)) - sin(Angle.B) - (cos(Angle.A) * cos(Angle.B)));
+
+		cout << "\n C = ";
+		DisplayDMS(Angle.C * ToDegree());
+		cout << "\n";
+
+		break;
+	}
+}
+
+void CaseTwoAnglesAndTheSideNotBetweenThem(stSides& Side, stAngles& Angle, enCases& Case)
+{
+	char FullSin;
+	cout << " Do you have which full sin? A,B,C : ";
+	cin >> FullSin;
+	switch (FullSin)
+	{
+	case 'A':
+		char InputA;
+		cout << " Do you have which Angle ? B or C : ";
+		cin >> InputA;
+		switch (InputA)
+		{
+		case 'B':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+			Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+			Side.b = (sin(Angle.B) * sin(Side.a)) / sin(Angle.A); // we still wanna get sin of side b
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+
+			Angle.C = 2 * (atan(cos((Side.a - Side.b) / 2) / cos((Side.a + Side.b) / 2) * tan((Angle.A + Angle.B) / 2)));
+
+			cout << "\n C = ";
+			DisplayDMS(sin(Angle.C) * ToDegree());
+			cout << "\n";
+
+			Side.c = (sin(Angle.C) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side c
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+			break;
+		case 'C':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+			Side.c = (sin(Angle.C) * sin(Side.a)) / sin(Angle.A); // we still wanna get sin of side b
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+
+			Angle.B = 2 * (atan(cos((Side.a - Side.c) / 2) / cos((Side.a + Side.c) / 2) * tan((Angle.A + Angle.C) / 2)));
+
+			cout << "\n B = ";
+			DisplayDMS(sin(Angle.B) * ToDegree());
+			cout << "\n";
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side c
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+			break;
+		}
+		break;
+	case 'B':
+		char InputB;
+		cout << " Do you have which Angle ? A or C : ";
+		cin >> InputB;
+		switch (InputB)
+		{
+		case 'A':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+			Side.b = ReadPositiveNumber("Enter Side  (b) Value : ") * ToRadian();
+
+			Side.a = (sin(Angle.A) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side b
+
+			cout << "\n a = ";
+			DisplayDMS(sin(Side.a) * ToDegree());
+			cout << "\n";
+
+			Angle.C = 2 * (atan(cos((Side.a - Side.b) / 2) / cos((Side.a + Side.b) / 2) * tan((Angle.A + Angle.B) / 2)));
+
+			cout << "\n C = ";
+			DisplayDMS(sin(Angle.C) * ToDegree());
+			cout << "\n";
+
+			Side.c = (sin(Angle.C) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side c
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+			break;
+		case 'C':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+			Side.c = (sin(Angle.C) * sin(Side.a)) / sin(Angle.A); // we still wanna get sin of side b
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+
+			Angle.B = 2 * (atan(cos((Side.a - Side.c) / 2) / cos((Side.a + Side.c) / 2) * tan((Angle.A + Angle.C) / 2)));
+
+			cout << "\n B = ";
+			DisplayDMS(sin(Angle.B) * ToDegree());
+			cout << "\n";
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side c
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+			break;
+		}
+		break;
+	case 'C':
+		char InputC;
+		cout << " Do you have which Angle ? A or B : ";
+		cin >> InputC;
+		switch (InputC)
+		{
+		case 'A':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+			Side.a = (sin(Angle.A) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side b
+
+			cout << "\n a = ";
+			DisplayDMS(sin(Side.a) * ToDegree());
+			cout << "\n";
+
+			Angle.B = 2 * (atan(cos((Side.c - Side.a) / 2) / cos((Side.a + Side.c) / 2) * tan((Angle.A + Angle.C) / 2)));
+
+			cout << "\n B = ";
+			DisplayDMS(sin(Angle.B) * ToDegree());
+			cout << "\n";
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side c
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+			break;
+		case 'B':
+			Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side b
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+
+			Angle.A = 2 * (atan(cos((Side.c - Side.b) / 2) / cos((Side.b + Side.c) / 2) * tan((Angle.B + Angle.C) / 2)));
+
+			cout << "\n A = ";
+			DisplayDMS(sin(Angle.A) * ToDegree());
+			cout << "\n";
+
+			Side.a = (sin(Angle.A) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side c
+
+			cout << "\n a = ";
+			DisplayDMS(sin(Side.a) * ToDegree());
+			cout << "\n";
+			break;
+		}
+		break;
+	}
+}
+
+void CaseTwoSidesAndTheAngleNotIncluded(stSides& Side, stAngles& Angle, enCases& Case)
+{
+	Line();
+	cout << "\nCase : " << GetCaseText(Case) << "\n";
+	Line();
+
+	char FullSin;
+	cout << " Do you have which full sin? A,B,C : ";
+	cin >> FullSin;
+	switch (FullSin)
+	{
+	case 'A':
+		char InputA;
+		cout << " Do you have which Angle ? B or C : ";
+		cin >> InputA;
+		switch (InputA)
+		{
+		case 'B':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+			Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+			Side.b = (sin(Angle.B) * sin(Side.a)) / sin(Angle.A); // we still wanna get sin of side b
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+
+			Angle.C = 2 * (atan(cos((Angle.A + Angle.B) / 2) * tan((Side.a + Side.b) / 2)) / cos((Angle.A - Angle.B) / 2));
+
+			cout << "\n C = ";
+			DisplayDMS(sin(Angle.C) * ToDegree());
+			cout << "\n";
+
+			Side.c = (sin(Angle.C) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side c
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+			break;
+		case 'C':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+			Side.c = (sin(Angle.C) * sin(Side.a)) / sin(Angle.A); // we still wanna get sin of side b
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+
+			Angle.B = 2 * (atan(cos((Angle.A + Angle.C) / 2) * tan((Side.a + Side.c) / 2)) / cos((Angle.A - Angle.C) / 2));
+
+			cout << "\n B = ";
+			DisplayDMS(sin(Angle.B) * ToDegree());
+			cout << "\n";
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side c
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+			break;
+		}
+		break;
+	case 'B':
+		char InputB;
+		cout << " Do you have which Angle ? A or C : ";
+		cin >> InputB;
+		switch (InputB)
+		{
+		case 'A':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+			Side.b = ReadPositiveNumber("Enter Side  (b) Value : ") * ToRadian();
+
+			Side.a = (sin(Angle.A) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side b
+
+			cout << "\n a = ";
+			DisplayDMS(sin(Side.a) * ToDegree());
+			cout << "\n";
+
+			Angle.C = 2 * (atan(cos((Angle.A + Angle.B) / 2) * tan((Side.a + Side.b) / 2)) / cos((Angle.A - Angle.B) / 2));
+
+			cout << "\n C = ";
+			DisplayDMS(sin(Angle.C) * ToDegree());
+			cout << "\n";
+
+			Side.c = (sin(Angle.C) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side c
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+			break;
+		case 'C':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.a = ReadPositiveNumber("Enter Side  (a) Value : ") * ToRadian();
+
+			Side.c = (sin(Angle.C) * sin(Side.a)) / sin(Angle.A); // we still wanna get sin of side b
+
+			cout << "\n c = ";
+			DisplayDMS(sin(Side.c) * ToDegree());
+			cout << "\n";
+
+			Angle.B = 2 * (atan(cos((Angle.A + Angle.C) / 2) * tan((Side.a + Side.c) / 2)) / cos((Angle.A - Angle.C) / 2));
+
+			cout << "\n B = ";
+			DisplayDMS(sin(Angle.B) * ToDegree());
+			cout << "\n";
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side c
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+			break;
+		}
+		break;
+	case 'C':
+		char InputC;
+		cout << " Do you have which Angle ? A or B : ";
+		cin >> InputC;
+		switch (InputC)
+		{
+		case 'A':
+			Angle.A = ReadPositiveNumber("Enter Angle (A) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+			Side.a = (sin(Angle.A) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side b
+
+			cout << "\n a = ";
+			DisplayDMS(sin(Side.a) * ToDegree());
+			cout << "\n";
+
+			Angle.B = 2 * (atan(cos((Angle.A + Angle.C) / 2) * tan((Side.a + Side.c) / 2)) / cos((Angle.A - Angle.C) / 2));
+
+			cout << "\n B = ";
+			DisplayDMS(sin(Angle.B) * ToDegree());
+			cout << "\n";
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side c
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+			break;
+		case 'B':
+			Angle.B = ReadPositiveNumber("Enter Angle (B) Value : ") * ToRadian();
+			Angle.C = ReadPositiveNumber("Enter Angle (C) Value : ") * ToRadian();
+			Side.c = ReadPositiveNumber("Enter Side  (c) Value : ") * ToRadian();
+
+			Side.b = (sin(Angle.B) * sin(Side.c)) / sin(Angle.C); // we still wanna get sin of side b
+
+			cout << "\n b = ";
+			DisplayDMS(sin(Side.b) * ToDegree());
+			cout << "\n";
+
+			Angle.A = 2 * (atan(cos((Angle.B + Angle.C) / 2) * tan((Side.b + Side.c) / 2)) / cos((Angle.B - Angle.C) / 2));
+
+			cout << "\n A = ";
+			DisplayDMS(sin(Angle.A) * ToDegree());
+			cout << "\n";
+
+			Side.a = (sin(Angle.A) * sin(Side.b)) / sin(Angle.B); // we still wanna get sin of side c
+
+			cout << "\n a = ";
+			DisplayDMS(sin(Side.a) * ToDegree());
+			cout << "\n";
+			break;
+		}
+		break;
+	}
+}
+
+void DetermineCase(enCases Case) // calculate results
+{
+	stSides Side;
+	stAngles Angle;
+	switch (Case)
+	{
+
+	case enCases::ThreeSidesAreGiven:
+		CaseThreeSidesAreGiven(Side, Angle, Case);
+		break;
+	case enCases::ThreeAnglesAreGiven:
+		CaseThreeAnglesAreGiven(Side, Angle, Case);
+		break;
+	case enCases::TwoSidesAndTheIncludedAngle:
+		CaseTwoSidesAndTheIncludedAngle(Side, Angle, Case);
+		break;
+	case enCases::TwoAnglesAndTheSideBetweenThem:
+		CaseTwoAnglesAndTheSideBetweenThem(Side, Angle, Case);
+		break;
+	case enCases::TwoAnglesAndTheSideNotBetweenThem:
+		CaseTwoAnglesAndTheSideNotBetweenThem(Side, Angle, Case);
+		break;
+	case enCases::TwoSidesAndTheAngleNotIncluded:
+		CaseTwoSidesAndTheAngleNotIncluded(Side, Angle, Case);
+		break;
+	case enCases::RightAngleTriangle:
+
+		break;
+	}
+}
+
+void StartProgram() // to ask the user if he wants calculate again
+{
+	system("Color 70");
+	char CalculateAgain = 'Y';
+	do {
+		ResetScreen();
+		DetermineCase(ReadCase());
+		cout << endl << "Do You Want To Calculate Again? Y/N? ";
+		cin >> CalculateAgain;
+	}
+	while (CalculateAgain == 'Y' || CalculateAgain == 'y');
+}
+
+int main()
+{
+	StartProgram();
+} // We need to make the input recive DMS From user
