@@ -1,0 +1,32 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Find Client.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Source.cpp
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsString.h(37,1): warning C4267: 'return': conversion from 'size_t' to 'short', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsString.h(42,1): warning C4267: 'return': conversion from 'size_t' to 'short', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsString.h(54,1): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsString.h(191,1): warning C4267: 'return': conversion from 'size_t' to 'short', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsString.h(322,1): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsString.h(370,1): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsUtil.h(67,1): warning C4102: 'defualt': unreferenced label
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsUser.h(199,5): warning C4240: nonstandard extension used: access to 'clsUser::stLoginRegisterRecord' now defined to be 'public', previously it was defined to be 'private'
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsUser.h(26): message : see declaration of 'clsUser::stLoginRegisterRecord'
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsInputValidate.h(98,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsInputValidate.h(102,26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(207,5): warning C4240: nonstandard extension used: access to 'clsBankClient::stTrnsferLogRecord' now defined to be 'public', previously it was defined to be 'private'
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(152): message : see declaration of 'clsBankClient::stTrnsferLogRecord'
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(28,65): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(162,39): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(163,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(164,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(421,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(434,1): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsAddNewCLientScreen.h(31,66): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsUpdateClientScreen.h(47,66): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsTransferScreen.h(42,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsTransferScreen.h(47,53): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsCurrency.h(27,8): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsUpdateRateScreen.h(17,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsCurrnecyCalculator.h(53,51): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(376): warning C4715: 'clsBankClient::Save': not all control paths return a value
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsBankClient.h(438): warning C4715: 'clsBankClient::Withdraw': not all control paths return a value
+D:\Studies\PL\c++\OOP Applications\OOP Bank System\clsUser.h(360): warning C4715: 'clsUser::Save': not all control paths return a value
+  Find Client.vcxproj -> D:\Studies\PL\c++\OOP Applications\OOP Bank System\x64\Debug\OOP Bank System.exe
